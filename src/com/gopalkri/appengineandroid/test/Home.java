@@ -1,4 +1,4 @@
-package com.gopalkri.appengineandroid;
+package com.gopalkri.appengineandroid.test;
 
 import android.app.Activity;
 import android.os.Bundle;

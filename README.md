@@ -20,12 +20,12 @@ All java source files required are in the package com.gopalkri.appengineandroid.
 You will need to add a few things to your AndroidManifest.xml. 
 
 * Add permissions
-* * android.permission.GET_ACCOUNTS
-* * android.permission.USE_CREDENTIALS
-* * android.permission.INTERNET
+  * android.permission.GET_ACCOUNTS
+  * android.permission.USE_CREDENTIALS
+  * android.permission.INTERNET
 * Add activities
-* * com.gopalkri.appengineandroid.AppEngineActivity
-* * com.gopalkri.appengineandroid.AuthenticationActivity
+  * com.gopalkri.appengineandroid.AppEngineActivity
+  * com.gopalkri.appengineandroid.AuthenticationActivity
 
 You will also need to add a layout xml file to your project: res/layout/appengine.xml.
 

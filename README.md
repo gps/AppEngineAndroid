@@ -14,18 +14,18 @@ Although this is not part of the license (I'm not sure whether I want to
 add it), I request that you notify me if you do in fact use this code in
 any way. It always helps to know that someone else is using my work :)
 
-# Usage.
+# Usage
 All java source files required are in the package com.gopalkri.appengineandroid.
 
 You will need to add a few things to your AndroidManifest.xml. 
 
 * Add permissions
-** android.permission.GET_ACCOUNTS
-** android.permission.USE_CREDENTIALS
-** android.permission.INTERNET
+* * android.permission.GET_ACCOUNTS
+* * android.permission.USE_CREDENTIALS
+* * android.permission.INTERNET
 * Add activities
-** com.gopalkri.appengineandroid.AppEngineActivity
-** com.gopalkri.appengineandroid.AuthenticationActivity
+* * com.gopalkri.appengineandroid.AppEngineActivity
+* * com.gopalkri.appengineandroid.AuthenticationActivity
 
 You will also need to add a layout xml file to your project: res/layout/appengine.xml.
 

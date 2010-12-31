@@ -110,12 +110,12 @@ public class Home extends Activity {
 	private void testPost() {	
 		try {
 			AppEngine ae = AppEngine.getInstance();
-			ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>(2);
-			postData.add(new BasicNameValuePair("", ""));
-			postData.add(new BasicNameValuePair("", ""));
-			String result = AppEngine.getStringFromHttpResponse(ae.doHttpPost("postTest", postData));
+			ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>();
+			postData.add(new BasicNameValuePair("testKey1", "testValue1"));
+			postData.add(new BasicNameValuePair("testKey2", "testValue2"));
+			String result = AppEngine.getStringFromHttpResponse(ae.doHttpPost("", postData));
 			mStatus.setText(result);
-			Log.d(TAG, "Rest of test POST: " + result);
+			Log.d(TAG, "Result of test POST: " + result);
 		} catch (AppEngineException e) {
 			e.printStackTrace();
 			mStatus.setText(e.getMessage());

@@ -8,18 +8,18 @@ package com.gopalkri.appengineandroid;
 /**
  * @author Gopal Sharma
  */
-public class HttpGetException extends AppEngineException {
+public class HttpRequestException extends AppEngineException {
 	
 	/**
 	 * Eclipse warns me to add this. Not sure why.
 	 */
 	private static final long serialVersionUID = 5793144026828818264L;
 
-	public HttpGetException(String message) {
+	public HttpRequestException(String message) {
 		super(message);
 	}
 	
-	public HttpGetException(Exception innerException) {
+	public HttpRequestException(Exception innerException) {
 		super(innerException);
 	}
 

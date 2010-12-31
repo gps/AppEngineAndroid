@@ -8,11 +8,15 @@ package com.gopalkri.appengineandroid;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.ClientPNames;
 import org.apache.http.cookie.Cookie;
 import org.apache.http.impl.client.DefaultHttpClient;
@@ -100,54 +104,88 @@ public class AppEngine {
 	}
 
 	/**
-	 * Performs a HTTP get request on path.
+	 * Initializes and returns a BufferedReader with contents of response.
 	 * 
-	 * @param path
-	 *            Path on which to perform HTTP GET. Ex: pass in "test" to do a
-	 *            HTTP GET on https://application-name/test.
-	 * @return BufferedReader initialized with response.
-	 * @throws HttpGetException
-	 *             If there is an error in performing the request.
+	 * @param response
+	 *            HttpResponse to read from.
+	 * @return BufferedReader initialized with contents of response.
+	 * @throws AppEngineException
+	 *             If there was an error in reading from response.
 	 */
-	public BufferedReader performHttpGet(String path) throws HttpGetException {
+	public static BufferedReader getBufferedReaderFromHttpResponse(
+			HttpResponse response) throws AppEngineException {
 		try {
-			HttpGet request = new HttpGet(mApplicationUrl + path);
-			HttpResponse response = mHttpClient.execute(request);
 			return new BufferedReader(new InputStreamReader(response
 					.getEntity().getContent()));
-		} catch (ClientProtocolException e) {
-			e.printStackTrace();
-			throw new HttpGetException(e);
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new HttpGetException(e);
+		} catch (Exception e) {
+			throw new AppEngineException(e);
 		}
 	}
 
 	/**
-	 * Similar to performHttpGet, except also read the response into a String
-	 * and return the String.
+	 * Reads response and returns it as a String.
 	 * 
-	 * @param path
-	 *            Path on which to perform HTTP GET. Ex: pass in "test" to do a
-	 *            HTTP GET on https://appplication-name/test.
-	 * @return Response from HTTP GET on path.
-	 * @throws HttpGetException
-	 *             If there is an error in performing the request.
+	 * @param response
+	 *            HttpResponse to read from.
+	 * @return response as a String.
+	 * @throws AppEngineException
+	 *             If there was an error in reading from response.
 	 */
-	public String fetchResponseFromHttpGet(String path) throws HttpGetException {
-		StringBuilder sb = new StringBuilder();
-		String line;
-		BufferedReader br = performHttpGet(path);
+	public static String getStringFromHttpResponse(HttpResponse response)
+			throws AppEngineException {
 		try {
+			StringBuilder sb = new StringBuilder();
+			BufferedReader br = getBufferedReaderFromHttpResponse(response);
+			String line;
 			while ((line = br.readLine()) != null) {
 				sb.append(line);
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			throw new HttpGetException(e);
+			return sb.toString();
+		} catch (Exception e) {
+			throw new AppEngineException(e);
 		}
-		return sb.toString();
+	}
+
+	/**
+	 * Performs a HTTP GET request on path.
+	 * 
+	 * @param path
+	 *            Path on which to perform HTTP GET. Ex: pass in "test" to do a
+	 *            HTTP GET on https://application-name/test.
+	 * @return HttpResponse returned by request.
+	 * @throws HttpRequestException
+	 *             If there is an error in performing the request.
+	 */
+	public HttpResponse doHttpGet(String path) throws HttpRequestException {
+		HttpGet httpGet = new HttpGet(mApplicationUrl + path);
+		try {
+			return mHttpClient.execute(httpGet);
+		} catch (Exception e) {
+			throw new HttpRequestException(e);
+		}
+	}
+
+	/**
+	 * Performs a HTTP POST request on path.
+	 * 
+	 * @param path
+	 *            Path on which to perform HTTP GET. Ex: pass in "test" to do a
+	 *            HTTP GET on https://application-name/test.
+	 * @param postData
+	 *            PostData to add to HTTP POST.
+	 * @return HttpResponse returned by request.
+	 * @throws HttpRequestException
+	 *             If there is an error in performing the request.
+	 */
+	public HttpResponse doHttpPost(String path, List<NameValuePair> postData)
+			throws HttpRequestException {
+		HttpPost httpPost = new HttpPost(mApplicationUrl + path);
+		try {
+			httpPost.setEntity(new UrlEncodedFormEntity(postData));
+			return mHttpClient.execute(httpPost);
+		} catch (Exception e) {
+			throw new HttpRequestException(e);
+		}
 	}
 
 	protected void fetchCookies(String authToken) throws CookieException {

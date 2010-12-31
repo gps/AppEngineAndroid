@@ -5,6 +5,11 @@
  */
 package com.gopalkri.appengineandroid.test;
 
+import java.util.ArrayList;
+
+import org.apache.http.NameValuePair;
+import org.apache.http.message.BasicNameValuePair;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,7 +18,7 @@ import android.widget.TextView;
 
 import com.gopalkri.appengineandroid.AppEngine;
 import com.gopalkri.appengineandroid.AppEngineActivity;
-import com.gopalkri.appengineandroid.HttpGetException;
+import com.gopalkri.appengineandroid.AppEngineException;
 import com.gopalkri.appengineandroid.R;
 
 /**
@@ -81,6 +86,7 @@ public class Home extends Activity {
 		mStatus.setText("Authenticated!");
 
 		testGet();
+		testPost();
 	}
 
 	/**
@@ -89,10 +95,28 @@ public class Home extends Activity {
 	private void testGet() {
 		AppEngine ae = AppEngine.getInstance();
 		try {
-			String result = ae.fetchResponseFromHttpGet("");
+			String result = AppEngine.getStringFromHttpResponse(ae.doHttpGet(""));
 			mStatus.setText(result);
 			Log.d(TAG, "Result for test GET: " + result);
-		} catch (HttpGetException e) {
+		} catch (AppEngineException e) {
+			e.printStackTrace();
+			mStatus.setText(e.getMessage());
+		}
+	}
+	
+	/**
+	 * Do a test post request.
+	 */
+	private void testPost() {	
+		try {
+			AppEngine ae = AppEngine.getInstance();
+			ArrayList<NameValuePair> postData = new ArrayList<NameValuePair>(2);
+			postData.add(new BasicNameValuePair("", ""));
+			postData.add(new BasicNameValuePair("", ""));
+			String result = AppEngine.getStringFromHttpResponse(ae.doHttpPost("postTest", postData));
+			mStatus.setText(result);
+			Log.d(TAG, "Rest of test POST: " + result);
+		} catch (AppEngineException e) {
 			e.printStackTrace();
 			mStatus.setText(e.getMessage());
 		}
